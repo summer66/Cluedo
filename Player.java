@@ -17,6 +17,7 @@ public class Player implements Serializable
     private boolean initialSetup;           //the server's startGame() sets this boolean variable true to signal the client that the incoming
                                             // object contains initial setup information
     private boolean isTurn;
+    private boolean isEndTurn;
     private boolean isTurnToDisprove;
     private String gameHistoryUpdate;
     private ArrayList<Integer> gamePieceLocations;
@@ -122,6 +123,10 @@ public class Player implements Serializable
     {
         isTurn = turn;
     }
+
+    public boolean isEndTurn() { return isEndTurn; }
+
+    public void setEndTurn(boolean endTurn) { isEndTurn = endTurn; }
 
     public boolean isTurnToDisprove()
     {

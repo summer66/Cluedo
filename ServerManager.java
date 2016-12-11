@@ -298,13 +298,15 @@ public class ServerManager
                 
                 if(inPlayer.isMoved()) {
                   int id = inPlayer.getPlayerID();
-                    int newLoc = inPlayer.getNewLocation();
+                  int newLoc = inPlayer.getNewLocation();
                   game.processMove(players, id, newLoc);
-                  game.setPlayerTurn(players, id);
                   broadcast(); 
                 } //end if isMoved
                 
-                
+                if(inPlayer.isEndTurn()) {
+                    game.setPlayerTurn(players, id);
+                    broadcast();
+                }
                 
                 if(inPlayer.isSuggested()) {
                     

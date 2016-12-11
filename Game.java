@@ -195,6 +195,10 @@ public class Game
         String characterName = (String) intToCardMap.get(playerID);
         String locationName = (String) intToCardMap.get(newLoc);
 
+        //set the player's new location occupied
+        nodes[newLoc].setOccupied(true);
+        movedPlayer.setMoved(false);
+
         for (int i = 0; i < numOfPlayers; i++) {
             Player player = players.get(i);
             player.setGameHistoryUpdate(characterName + " moved to " + locationName);
@@ -202,11 +206,6 @@ public class Game
             player.setInitialSetup(false);
 
         }
-
-        //set the player's new location occupied
-
-        nodes[newLoc].setOccupied(true);
-        movedPlayer.setMoved(false);
     }
 
     public void processSuggestion(Player player, int suspect, int weapon, int room)
@@ -255,8 +254,11 @@ public class Game
         int locationID = player.getLocationID();
         ArrayList<Integer> moves = moveOptions(player);
         //the first element of moves is to signal what type of actions are allowed for this player
-        if (rooms.contains(locationID)) moves.add(0); //if the player is in a room, 0 indicates he can move or suggest
-        else moves.add(1);  //if the player is in the hallway, 1 indicates he can only move
+        if (rooms.contains(locationID)) {
+            moves.add(0); //if the player is in a room, 0 indicates he can move or suggest
+        } else {
+            moves.add(1);  //if the player is in the hallway, 1 indicates he can only move
+        }
         //either 0 or 1 implies the player can accuse
         return moves;
     }

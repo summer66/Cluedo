@@ -347,8 +347,15 @@ public class MainGameUI extends Application
                 AlertBox.display("Please select a value to accuse.");
         });
 
+        Button endTurnButton = new Button("End Turn");
+        endTurnButton.setOnAction(event -> {
+            player = client.getPlayer();
+            player.setEndTurn(true);
+            client.sendMessage(player);
+        });
+
         HBox suggAccuButtonHB = new HBox();
-        suggAccuButtonHB.getChildren().addAll(makeSuggButton, makeAccuButton);
+        suggAccuButtonHB.getChildren().addAll(makeSuggButton, makeAccuButton, endTurnButton);
         suggAccuButtonHB.setSpacing(50);
         suggAccuButtonHB.setAlignment(Pos.CENTER);
         Separator leftSeparator4 = new Separator();
