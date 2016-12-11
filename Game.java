@@ -215,7 +215,7 @@ public class Game
 
     } //end method processSuggestion
 
-public boolean processAccusation(Player players, int suspect, int weapon, int room)
+    public boolean processAccusation(Player players, int suspect, int weapon, int room)
     {
         //gui.writeLog("Casefile is " + casefile.getCaseFile());
         gui.writeLog("Casefile is " + casefile.getCaseFile());
@@ -231,12 +231,27 @@ public boolean processAccusation(Player players, int suspect, int weapon, int ro
 
 
 
-        public void setPlayerTurn()
+        public void setPlayerTurn(ArrayList<Player> players, int playerID)
     {
-        //set the ClueLessMsg object's type to YOURTURN
-        //set the ClueLessMsg object's isTurn attribute to true
-        //set the ClueLessMsg object's message to the arraylist obtained by allowedActions()
-    }public ArrayList<Integer> allowedActions(Player player)
+        int numOfPlayers = players.size();
+        Player playersTurn;
+        if (playerID == (numOfPlayers - 1)) {
+            playersTurn = players.get(0);
+        } else {
+            playersTurn = players.get(playerID + 1);
+        }
+
+        playersTurn.setTurn(true);
+        playersTurn.setAllowedActions(allowedActions(playersTurn));
+
+        for (int i = 0; i < numOfPlayers; i++) {
+            String characterName = (String) intToCardMap.get(playersTurn.getPlayerID());
+            Player player = players.get(i);
+            player.setGameHistoryUpdate("It is now " + characterName + "'s turn to move.");
+        }
+    }
+
+    public ArrayList<Integer> allowedActions(Player player)
     {
         int locationID = player.getLocationID();
         ArrayList<Integer> moves = moveOptions(player);

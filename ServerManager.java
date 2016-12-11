@@ -300,6 +300,7 @@ public class ServerManager
                   int id = inPlayer.getPlayerID();
                     int newLoc = inPlayer.getNewLocation();
                   game.processMove(players, id, newLoc);
+                  game.setPlayerTurn(players, id);
                   broadcast(); 
                 } //end if isMoved
                 
