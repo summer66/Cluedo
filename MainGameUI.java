@@ -761,7 +761,6 @@ public class MainGameUI extends Application
     {
         ArrayList<Integer> list = new ArrayList<>();
         int ch = (Integer) cardIntMap.get(characters.getValue());
-
         int wp = (Integer) cardIntMap.get(weapons.getValue());
         int rm = (Integer) cardIntMap.get(rooms.getValue());
         System.out.println(rm);

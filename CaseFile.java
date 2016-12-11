@@ -26,7 +26,6 @@ public class CaseFile {
     public String getCaseFileResult () {
         return "suspect=" + suspect + "  "
                 + "weapon=" + weapon + " room=" + room;
-        
     }
 
     public int[] getCaseFile(){

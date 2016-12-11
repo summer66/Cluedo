@@ -124,24 +124,15 @@ public class ServerManager
     
     private synchronized void broadcastGameHistory(String GameHistoryUpdate)
     {
-       
         for (int i = 0; i < clients.size(); i++) {
            
             Client ct = clients.get(i);
-            
-                  
-           
             ct.player.setGameHistoryUpdate(GameHistoryUpdate);
-           
-            
+
             gui.writeLog("Broadcast Method: Game History " + ct.player.getGameHistoryUpdate());
             
-            
             ct.sendPlayerObj();
-            
             ct.player.setGameHistoryUpdate(null);
-            
-            
         } //end for i
     } //end method broadcastgameHistory
     
@@ -256,10 +247,6 @@ public class ServerManager
             //notify me of all clients current joined to game
             sendCurrentPlayers(this);
             
-            
-            
-           
-            
             while (runFlag) {
                 try {
                     inPlayer = (Player) input.readObject();
@@ -287,17 +274,13 @@ public class ServerManager
 
                     String accusationValues = accusation.get(0).toString() + "," + accusation.get(1).toString() + "," + accusation.get(2).toString();
                     gui.writeLog(characterName + "(" + inPlayer.getUserName() + " accusation is " + accusationValues);
-                    if (game.processAccusation(player, accusation.get(0), accusation.get(1), accusation.get(2))) {
+                    if (game.processAccusation(accusation.get(0), accusation.get(1), accusation.get(2))) {
                         //declare winner game is over
                         broadcastGameHistory("WINNER," + characterName + "(" + player.getUserName() + ")\n" + "Game is over.");
                     } else  {
                         //accused failed and set active flag for this player
                         player.setActive(false);
                         broadcastGameHistory(characterName + "(" + player.getUserName()+ ") accusation failed.");
-
-                        //set isTurn on each player object
-
-
                     } //end if else
                    
                 } //end if isAccused
@@ -314,13 +297,11 @@ public class ServerManager
                 
                 
                 if(inPlayer.isSuggested()) {
-                    
                    ArrayList<Integer> suggestion = inPlayer.getSuggestoin();   
-                  game.processSuggestion(player, suggestion.get(0), suggestion.get(1), suggestion.get(2));
+                   game.processSuggestion(player, suggestion.get(0), suggestion.get(1), suggestion.get(2));
                    broadcast(); 
                     
                 } //end if isSuggested
-                
                 
                 if(inPlayer.isDisproved()) {
                    game.processDisprove(player, inPlayer.getDisprovedCard());
@@ -328,12 +309,10 @@ public class ServerManager
                     
                 } //end if isDisproved
                 
-                
                  if(inPlayer.isEndTurn()) {
                     game.setPlayerTurn(players, id);
                     broadcast();
                 }
-
 
                 try {
                     close();

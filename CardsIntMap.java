@@ -23,7 +23,7 @@ public class CardsIntMap
         //weapons 6-11
         cardToIntMap.put("Rope", 6);
         cardToIntMap.put("Lead pipe", 7);
-        cardToIntMap.put("Knife ", 8);
+        cardToIntMap.put("Knife", 8);
         cardToIntMap.put("Wrench", 9);
         cardToIntMap.put("Candlestick", 10);
         cardToIntMap.put("Revolver", 11);

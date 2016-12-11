@@ -201,10 +201,9 @@ public class Game
 
         for (int i = 0; i < numOfPlayers; i++) {
             Player player = players.get(i);
-            player.setGameHistoryUpdate(characterName + " moved to " + locationName);
             player.setGamePieceLocations(gamePieceLocations);
             player.setInitialSetup(false);
-
+            player.setGameHistoryUpdate(characterName + " moved to " + locationName + ".");
         }
     }
 
@@ -213,21 +212,14 @@ public class Game
 
     } //end method processSuggestion
 
-    public boolean processAccusation(Player players, int suspect, int weapon, int room)
+    public boolean processAccusation(int suspect, int weapon, int room)
     {
         //gui.writeLog("Casefile is " + casefile.getCaseFile());
         gui.writeLog("Casefile is " + casefile.getCaseFileResult());
         Boolean match = casefile.matchCaseFile(suspect, weapon, room);
-        if (match) {   //we have a winner
-            return true;
-        } else {
-            //did not match
-            return false;
-        } //end if else match
-            //end if else//end if else match
-        } //end method processAccusation
 
-
+        return match;
+    } //end method processAccusation
 
     public void setPlayerTurn(ArrayList<Player> players, int playerID)
     {
@@ -287,7 +279,6 @@ public class Game
 
     private class Node
     {
-
         int location;
         boolean occupied;
 
