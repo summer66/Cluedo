@@ -316,7 +316,7 @@ public class MainGameUI extends Application
                 ArrayList<Integer> values = getSuggAccuValues(characterCB, weaponCB, roomCB);
                 //validate room
                 int currLocation = player.getLocationID();
-                if (currLocation == values.get(2))
+                if (currLocation != values.get(2))
                     AlertBox.display("The suggested room has to be the room you are in.");
                 else {
                     player.setSuggested(true);
@@ -352,6 +352,7 @@ public class MainGameUI extends Application
             player = client.getPlayer();
             player.setEndTurn(true);
             client.sendMessage(player);
+            endTurnButton.setDisable(true);
         });
 
         HBox suggAccuButtonHB = new HBox();

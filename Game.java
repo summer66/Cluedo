@@ -212,11 +212,14 @@ public class Game
 
     } //end method processSuggestion
 
-    public boolean processAccusation(int suspect, int weapon, int room)
+    public boolean processAccusation(ArrayList<Player> players, int suspect, int weapon, int room)
     {
-        //gui.writeLog("Casefile is " + casefile.getCaseFile());
         gui.writeLog("Casefile is " + casefile.getCaseFileResult());
         Boolean match = casefile.matchCaseFile(suspect, weapon, room);
+
+        for (Player player : players) {
+            player.setInitialSetup(false);
+        }
 
         return match;
     } //end method processAccusation
@@ -237,6 +240,7 @@ public class Game
         for (int i = 0; i < numOfPlayers; i++) {
             String characterName = (String) intToCardMap.get(playersTurn.getPlayerID());
             Player player = players.get(i);
+            player.setInitialSetup(false);
             player.setGameHistoryUpdate("It is now " + characterName + "'s turn to move.");
         }
     }

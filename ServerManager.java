@@ -83,10 +83,6 @@ public class ServerManager
         gui.resetLog();
     } //end method stop
 
-    /**
-     * This method is mainly used for updating game history. It sends all clients their individual ClueLessMsg object with type GAMEHISTORY.
-     * @param players
-     */
     private synchronized void broadcast()
     {
         for (int i = 0; i < clients.size(); i++) {
@@ -94,8 +90,7 @@ public class ServerManager
             ct.sendPlayerObj();
         } //end for i
     } //end method broadcast
-    
-    
+
      private synchronized void broadcastJoinedPlayer(String joinedPlayer)
     {
        
@@ -274,7 +269,7 @@ public class ServerManager
 
                     String accusationValues = accusation.get(0).toString() + "," + accusation.get(1).toString() + "," + accusation.get(2).toString();
                     gui.writeLog(characterName + "(" + inPlayer.getUserName() + " accusation is " + accusationValues);
-                    if (game.processAccusation(accusation.get(0), accusation.get(1), accusation.get(2))) {
+                    if (game.processAccusation(players, accusation.get(0), accusation.get(1), accusation.get(2))) {
                         //declare winner game is over
                         broadcastGameHistory("WINNER," + characterName + "(" + player.getUserName() + ")\n" + "Game is over.");
                     } else  {
@@ -284,23 +279,19 @@ public class ServerManager
                     } //end if else
                    
                 } //end if isAccused
-                
-                
+
                 if(inPlayer.isMoved()) {
                   int id = inPlayer.getPlayerID();
-                    int newLoc = inPlayer.getNewLocation();
+                  int newLoc = inPlayer.getNewLocation();
                   game.processMove(players, id, newLoc);
                   game.setPlayerTurn(players, id);
                   broadcast(); 
                 } //end if isMoved
                 
-                
-                
                 if(inPlayer.isSuggested()) {
                    ArrayList<Integer> suggestion = inPlayer.getSuggestoin();   
                    game.processSuggestion(player, suggestion.get(0), suggestion.get(1), suggestion.get(2));
-                   broadcast(); 
-                    
+                   broadcast();
                 } //end if isSuggested
                 
                 if(inPlayer.isDisproved()) {
