@@ -216,7 +216,7 @@ public class Game
     public boolean processAccusation(Player players, int suspect, int weapon, int room)
     {
         //gui.writeLog("Casefile is " + casefile.getCaseFile());
-        gui.writeLog("Casefile is " + casefile.getCaseFile());
+        gui.writeLog("Casefile is " + casefile.getCaseFileResult());
         Boolean match = casefile.matchCaseFile(suspect, weapon, room);
         if (match) {   //we have a winner
             return true;
