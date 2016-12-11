@@ -1,3 +1,4 @@
+import com.google.common.collect.BiMap;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,6 +25,7 @@ public class ServerManager
     private ArrayList<Player> players;
     private static int uniqueId;
     private Game game;
+    private BiMap intToCardMap;
   //  private Player player;
 
     public ServerManager(Integer port, ServerGUI gui)
@@ -34,6 +36,8 @@ public class ServerManager
         players = new ArrayList<>();
         game = new Game(gui);
         uniqueId = 0;
+        CardsIntMap map = new CardsIntMap();
+        intToCardMap = map.getIntToCardMap();
 
     } //end constructor with port
 
@@ -173,7 +177,9 @@ public class ServerManager
                if (myCT.id!=i) {
                
                Client ct = clients.get(i); 
-               String joinedPlayer = ct.player.getUserName() + "," + ct.player.getPlayerID();
+               String characterName = (String) intToCardMap.get(ct.player.getPlayerID());
+               
+               String joinedPlayer = characterName + "(" + ct.player.getUserName() +")";
                
                myCT.player.setJoinedPlayer(joinedPlayer);
                myCT.player.setJoin(true); 
@@ -244,7 +250,8 @@ public class ServerManager
             sendPlayerObj();
             player.setGameHistoryUpdate(null);
             //notify all clients that I joined the game
-            broadcastJoinedPlayer(player.getUserName() + "," + player.getPlayerID()); 
+            String characterName = (String) intToCardMap.get(player.getPlayerID());
+            broadcastJoinedPlayer(characterName + "(" + player.getUserName() +")"); 
            
             //notify me of all clients current joined to game
             sendCurrentPlayers(this);
@@ -256,7 +263,7 @@ public class ServerManager
             while (runFlag) {
                 try {
                     inPlayer = (Player) input.readObject();
-                    gui.writeLog("Receiving Message from " + inPlayer.getUserName());
+                    gui.writeLog("Receiving Message from " + characterName + "(" + inPlayer.getUserName() +")");
                 } catch (IOException | ClassNotFoundException ex) {
                  //   Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     break;
@@ -264,7 +271,7 @@ public class ServerManager
 
                 /* Process initial start of game */ 
                 if(inPlayer.isStarted()) {
-                    gui.writeLog("received isStarted from " + inPlayer.getUserName());
+                    gui.writeLog("received isStarted from " + characterName + "(" + inPlayer.getUserName() +")");
                     game.startGame(players);
                     broadcast();
                     player.setInitialSetup(false);
@@ -279,14 +286,14 @@ public class ServerManager
                     ArrayList<Integer> accusation = inPlayer.getAccusation();
 
                     String accusationValues = accusation.get(0).toString() + "," + accusation.get(1).toString() + "," + accusation.get(2).toString();
-                    gui.writeLog("Player: " + inPlayer.getUserName() + " accusation is " + accusationValues);
+                    gui.writeLog(characterName + "(" + inPlayer.getUserName() + " accusation is " + accusationValues);
                     if (game.processAccusation(player, accusation.get(0), accusation.get(1), accusation.get(2))) {
                         //declare winner game is over
-                        broadcastGameHistory("WINNER," + player.getPlayerID() + "\n" + "Game is over.");
+                        broadcastGameHistory("WINNER," + characterName + "(" + player.getUserName() + ")\n" + "Game is over.");
                     } else  {
                         //accused failed and set active flag for this player
                         player.setActive(false);
-                        broadcastGameHistory("Player" + player.getPlayerID()+ "'s accusation failed.");
+                        broadcastGameHistory(characterName + "(" + player.getUserName()+ ") accusation failed.");
 
                         //set isTurn on each player object
 
@@ -298,15 +305,13 @@ public class ServerManager
                 
                 if(inPlayer.isMoved()) {
                   int id = inPlayer.getPlayerID();
-                  int newLoc = inPlayer.getNewLocation();
+                    int newLoc = inPlayer.getNewLocation();
                   game.processMove(players, id, newLoc);
+                  game.setPlayerTurn(players, id);
                   broadcast(); 
                 } //end if isMoved
                 
-                if(inPlayer.isEndTurn()) {
-                    game.setPlayerTurn(players, id);
-                    broadcast();
-                }
+                
                 
                 if(inPlayer.isSuggested()) {
                     
@@ -324,7 +329,10 @@ public class ServerManager
                 } //end if isDisproved
                 
                 
-                
+                 if(inPlayer.isEndTurn()) {
+                    game.setPlayerTurn(players, id);
+                    broadcast();
+                }
 
 
                 try {
