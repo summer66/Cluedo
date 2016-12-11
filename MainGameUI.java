@@ -242,8 +242,6 @@ public class MainGameUI extends Application
             }
             player.setDisproved(true);
             client.sendMessage(player);
-
-
         });
 
         disproveButton2 = new Button("Unable to disprove");
@@ -254,7 +252,6 @@ public class MainGameUI extends Application
             player.setDisproved(true);
             player.setDisprovedCard(-1);
             client.sendMessage(player);
-
         });
 
         HBox disproveHB = new HBox();
@@ -325,13 +322,11 @@ public class MainGameUI extends Application
                     player.setSuggested(true);
                     player.setSuggestoin(values);
                     client.sendMessage(player);
-
                 }
             }  //send player object
 
             else
                 AlertBox.display("Please select a value to suggest.");
-
         });
 
         Button makeAccuButton = new Button("Make accusation");
@@ -364,8 +359,6 @@ public class MainGameUI extends Application
         leftStack.getChildren().add(suggAccuVB);
 
         //Possible moves
-
-
         movesSection = new VBox();
         movesSection.setSpacing(30);
         group2 = new ToggleGroup();
@@ -521,7 +514,6 @@ public class MainGameUI extends Application
         scene2 = new Scene(pane);
         window.setScene(scene1);
         window.show();
-
     }
 
     public void setCardsRB(ArrayList<Integer> cards)
@@ -557,9 +549,9 @@ public class MainGameUI extends Application
             for (int i = 4; i < numOfCards; i++)
                 secondRowCardsRB.getChildren().add(cardsRB[i]);
             cardsRBVBox.getChildren().addAll(cardsRBHBox, secondRowCardsRB);
-        } else cardsRBVBox.getChildren().add(cardsRBHBox);
-
-
+        } else {
+            cardsRBVBox.getChildren().add(cardsRBHBox);
+        }
     }
 
    /* public void setCards(ArrayList<Integer> cards){
@@ -610,9 +602,8 @@ public class MainGameUI extends Application
 
         Separator leftSeparator3 = new Separator();
 
+        movesSection.getChildren().clear();
         movesSection.getChildren().addAll(movesVB, leftSeparator3);
-
-
     }
 
     public void setCharTokens()

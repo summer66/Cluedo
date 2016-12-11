@@ -197,12 +197,11 @@ public class Game
 
         for (int i = 0; i < numOfPlayers; i++) {
             Player player = players.get(i);
-            player.setGameHistoryUpdate(characterName + " moved to " + locationName + "\n");
+            player.setGameHistoryUpdate(characterName + " moved to " + locationName);
             player.setGamePieceLocations(gamePieceLocations);
             player.setInitialSetup(false);
 
         }
-
 
         //set the player's new location occupied
 
@@ -231,7 +230,7 @@ public class Game
 
 
 
-        public void setPlayerTurn(ArrayList<Player> players, int playerID)
+    public void setPlayerTurn(ArrayList<Player> players, int playerID)
     {
         int numOfPlayers = players.size();
         Player playersTurn;

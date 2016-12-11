@@ -205,7 +205,7 @@ public class ClientManager
                             if (player.isTurn()) {
 
                                 ArrayList<Integer> list = player.getAllowedActions();
-                                //System.out.println(list.toString()
+
                                 if(list != null) {
                                     if (list.get(list.size() - 1) == 1) {
 
@@ -247,6 +247,9 @@ public class ClientManager
                                         player.setTurn(false);
                                     }
                                 }
+                            } else if (!player.isTurn()){
+                                moveSections = gameUI.getMovesSection();
+                                moveSections.setVisible(false);
                             }
 
                             if (player.isTurnToDisprove()) {
