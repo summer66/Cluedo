@@ -207,9 +207,20 @@ public class Game
         }
     }
 
-    public void processSuggestion(Player player, int suspect, int weapon, int room)
+    public void processSuggestion(ArrayList<Player> players, Player player, ArrayList<Integer> suggestion)
     {
-
+        player.setSuggested(true);
+        player.setSuggestoin(suggestion);
+        int suspect = suggestion.get(0);
+        int weapon = suggestion.get(1);
+        int room = suggestion.get(2);
+        for (Player playerGUI : players) {
+            String characterName = (String) intToCardMap.get(player.getPlayerID());
+            playerGUI.setInitialSetup(false);
+            playerGUI.setGameHistoryUpdate(characterName + " suggested that it was " + intToCardMap.get(suspect) +
+                    " in the " + intToCardMap.get(room) + " with a " + intToCardMap.get(weapon));
+        }
+        setTurnToDisprove(players, player.getPlayerID(), null);
     } //end method processSuggestion
 
     public boolean processAccusation(ArrayList<Player> players, int suspect, int weapon, int room)
@@ -259,14 +270,46 @@ public class Game
         return moves;
     }
 
-    public void setTurnToDisprove()
+    public void setTurnToDisprove(ArrayList<Player> players, int playerID, Player suggester)
     {
-        //decide whose turn it is to disprove
+        if (suggester != null && playerID == suggester.getPlayerID()) {
+            players.get(playerID).setTurnToDisprove(false);
+            setPlayerTurn(players, playerID);
+        } else {
+            int numOfPlayers = players.size();
+            Player playersTurn;
+            if (playerID == (numOfPlayers - 1)) {
+                playersTurn = players.get(0);
+            } else {
+                playersTurn = players.get(playerID + 1);
+            }
+
+            players.get(playerID).setTurnToDisprove(false);
+            playersTurn.setTurnToDisprove(true);
+
+            for (int i = 0; i < numOfPlayers; i++) {
+                String characterName = (String) intToCardMap.get(playersTurn.getPlayerID());
+                Player player = players.get(i);
+                player.setInitialSetup(false);
+                player.setGameHistoryUpdate("It is now " + characterName + "'s turn to disprove the suggestion.");
+            }
+        }
     }
 
-    public void processDisprove(Player player, int card)
+    public void processDisprove(ArrayList<Player> players, Player player, int card)
     {
-        //process disproves
+        Player suggester;
+        for (Player playerIterator : players) {
+            if (playerIterator.isSuggested()) {
+                suggester = playerIterator;
+                ArrayList<Integer> suggestion = suggester.getSuggestoin();
+                if (suggestion.contains(card)) {
+                    setPlayerTurn(players, suggester.getPlayerID());
+                } else {
+                    setTurnToDisprove(players, player.getPlayerID(), suggester);
+                }
+            }
+        }
     }
 
     public ArrayList<Integer> gamePieceLocations()

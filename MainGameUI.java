@@ -237,9 +237,11 @@ public class MainGameUI extends Application
             if (group1.getSelectedToggle() == null)
                 player.setDisprovedCard(-1);
             else {
-                int m = (Integer) group1.getSelectedToggle().getUserData();              //extract disproved card
+                int m = (Integer) group1.getSelectedToggle().getUserData();
+                player.setDisprovedCard(m);//extract disproved card
                 System.out.println(m);
             }
+            player.setTurnToDisprove(false);
             player.setDisproved(true);
             client.sendMessage(player);
         });
@@ -249,6 +251,7 @@ public class MainGameUI extends Application
         disproveButton2.setOnAction(event ->
         {
             player = client.getPlayer();
+            player.setTurnToDisprove(false);
             player.setDisproved(true);
             player.setDisprovedCard(-1);
             client.sendMessage(player);
@@ -314,11 +317,14 @@ public class MainGameUI extends Application
         {
             if (verifyComboBoxInput(characterCB, weaponCB, roomCB)) {
                 ArrayList<Integer> values = getSuggAccuValues(characterCB, weaponCB, roomCB);
+                player = client.getPlayer();
                 //validate room
                 int currLocation = player.getLocationID();
                 if (currLocation != values.get(2))
                     AlertBox.display("The suggested room has to be the room you are in.");
                 else {
+                    player.setEndTurn(false);
+                    player.setAccused(false);
                     player.setSuggested(true);
                     player.setSuggestoin(values);
                     client.sendMessage(player);
@@ -337,6 +343,8 @@ public class MainGameUI extends Application
                 ArrayList<Integer> values = getSuggAccuValues(characterCB, weaponCB, roomCB);
                 player = client.getPlayer();
                 System.out.println("Has the player started? " + player.isStarted());
+                player.setEndTurn(false);
+                player.setSuggested(false);
                 player.setAccused(true);
                 System.out.println("Has the player accused? " + player.isAccused());
                 player.setAccusation(values);
@@ -352,7 +360,6 @@ public class MainGameUI extends Application
             player = client.getPlayer();
             player.setEndTurn(true);
             client.sendMessage(player);
-            endTurnButton.setDisable(true);
         });
 
         HBox suggAccuButtonHB = new HBox();

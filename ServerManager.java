@@ -277,30 +277,29 @@ public class ServerManager
                         player.setActive(false);
                         broadcastGameHistory(characterName + "(" + player.getUserName()+ ") accusation failed.");
                     } //end if else
-                   
                 } //end if isAccused
 
                 if(inPlayer.isMoved()) {
                   int id = inPlayer.getPlayerID();
                   int newLoc = inPlayer.getNewLocation();
                   game.processMove(players, id, newLoc);
-                  game.setPlayerTurn(players, id);
                   broadcast(); 
                 } //end if isMoved
-                
+
+                if(inPlayer.isDisproved()) {
+                    game.processDisprove(players, player, inPlayer.getDisprovedCard());
+                    broadcast();
+                } //end if isDisproved
+
                 if(inPlayer.isSuggested()) {
-                   ArrayList<Integer> suggestion = inPlayer.getSuggestoin();   
-                   game.processSuggestion(player, suggestion.get(0), suggestion.get(1), suggestion.get(2));
+                   ArrayList<Integer> suggestion = inPlayer.getSuggestoin();
+                   broadcastGameHistory("Suggestion: " + intToCardMap.get(suggestion.get(0)) + ", "
+                           + intToCardMap.get(suggestion.get(1)) + ", " + intToCardMap.get(suggestion.get(2)));
+                   game.processSuggestion(players, player, suggestion);
                    broadcast();
                 } //end if isSuggested
-                
-                if(inPlayer.isDisproved()) {
-                   game.processDisprove(player, inPlayer.getDisprovedCard());
-                   broadcast();
-                    
-                } //end if isDisproved
-                
-                 if(inPlayer.isEndTurn()) {
+
+                if(inPlayer.isEndTurn()) {
                     game.setPlayerTurn(players, id);
                     broadcast();
                 }

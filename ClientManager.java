@@ -260,37 +260,23 @@ public class ClientManager
                                     public void run()
                                     {
                                         gameUI.disproveButton.setDisable(false);
-                                        gameUI.disproveButton.setOnAction(event ->                                     //disprove buttons
-                                        {
-                                            if (gameUI.group1.getSelectedToggle() == null)
-                                                player.setDisprovedCard(-1);
-                                            else {
-                                                int m = (Integer) gameUI.group1.getSelectedToggle().getUserData();              //extract disproved card
-                                                System.out.println("Card "+ m + "is disproved.");
-                                            }
-                                            player.setDisproved(true);
-                                            sendMessage(player);
-
-
-                                        });
-
-                                        gameUI.disproveButton2 = new Button("Unable to disprove");
-                                        gameUI.disproveButton2.setDisable(true);
-                                        gameUI.disproveButton2.setOnAction(event ->
-                                        {
-
-                                            player.setDisproved(true);
-                                            player.setDisprovedCard(-1);
-                                            sendMessage(player);
-
-                                        });
+                                        gameUI.disproveButton2.setDisable(false);
+                                        player.setTurnToDisprove(false);
+                                        player.setDisproved(true);
                                     }
-
                                 });
                             }
 
                             if (player.isDisproved()) {
-
+                                Platform.runLater(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        player.setTurnToDisprove(false);
+                                        player.setDisproved(true);
+                                    }
+                                });
                             }
                             if (!player.isActive()) {
 
