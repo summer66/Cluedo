@@ -245,6 +245,10 @@ public class Game
             playersTurn = players.get(playerID + 1);
         }
 
+        System.out.println("CaseFileResult: " + casefile.getCaseFileResult());
+        playersTurn.setSuggested(false);
+        playersTurn.setDisproved(false);
+        playersTurn.setAccused(false);
         playersTurn.setTurn(true);
         playersTurn.setAllowedActions(allowedActions(playersTurn));
 

@@ -345,12 +345,11 @@ public class MainGameUI extends Application
                 System.out.println("Has the player started? " + player.isStarted());
                 player.setEndTurn(false);
                 player.setSuggested(false);
+                player.setDisproved(false);
                 player.setAccused(true);
                 System.out.println("Has the player accused? " + player.isAccused());
                 player.setAccusation(values);
-                client.sendMessage(player);
-                makeAccuButton.setDisable(true);                                    //making accusation
-
+                client.sendMessage(player);                                  //making accusation
             } else
                 AlertBox.display("Please select a value to accuse.");
         });
@@ -358,6 +357,9 @@ public class MainGameUI extends Application
         Button endTurnButton = new Button("End Turn");
         endTurnButton.setOnAction(event -> {
             player = client.getPlayer();
+            player.setSuggested(false);
+            player.setDisproved(false);
+            player.setAccused(false);
             player.setEndTurn(true);
             client.sendMessage(player);
         });
@@ -598,6 +600,9 @@ public class MainGameUI extends Application
             player = client.getPlayer();
             int m = (Integer) group2.getSelectedToggle().getUserData();
             System.out.println("Move to " + m + " is selected.");
+            player.setSuggested(false);
+            player.setDisproved(false);
+            player.setAccused(false);
             player.setMoved(true);
             player.setNewLocation(m);
             client.sendMessage(player);
