@@ -287,6 +287,11 @@ public class ServerManager
                 } //end if isMoved
 
                 if(inPlayer.isDisproved()) {
+                    if (inPlayer.getDisprovedCard() != -1) {
+                        broadcastGameHistory("Disprove attempt by " + intToCardMap.get(inPlayer.getPlayerID()) + " with " + intToCardMap.get(inPlayer.getDisprovedCard()));
+                    } else {
+                        broadcastGameHistory(intToCardMap.get(inPlayer.getPlayerID()) + " unable to Disprove.");
+                    }
                     game.processDisprove(players, player, inPlayer.getDisprovedCard());
                     broadcast();
                 } //end if isDisproved
